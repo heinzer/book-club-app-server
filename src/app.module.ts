@@ -4,10 +4,12 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { ClubModule } from './club/club.module';
+import { UserModule } from './user/user.module';
 
 @Module({
   imports: [
     ClubModule,
+    UserModule,
     ConfigModule.forRoot(),
     TypeOrmModule.forRoot({
       url: process.env.DATABASE_URL,
@@ -20,6 +22,7 @@ import { ClubModule } from './club/club.module';
       autoLoadEntities: true,
     }),
     ClubModule,
+    UserModule,
   ],
   controllers: [AppController],
   providers: [AppService],

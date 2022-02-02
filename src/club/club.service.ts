@@ -7,15 +7,15 @@ import { Club } from './club.entity';
 export class ClubService {
   constructor(
     @InjectRepository(Club)
-    private usersRepository: Repository<Club>,
+    private clubRepository: Repository<Club>,
   ) {}
 
   getClubs(): Promise<Club[]> {
-    return this.usersRepository.find();
+    return this.clubRepository.find();
   }
 
   addClub(club): Promise<Club> {
-    this.usersRepository.insert(club);
+    this.clubRepository.insert(club);
     return club;
   }
 }

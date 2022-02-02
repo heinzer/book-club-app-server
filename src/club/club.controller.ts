@@ -4,15 +4,15 @@ import { ClubService } from './club.service';
 
 @Controller('club')
 export class ClubController {
-  constructor(private readonly userService: ClubService) {}
+  constructor(private readonly clubService: ClubService) {}
 
   @Get()
-  getUsers() {
-    return this.userService.getClubs();
+  getClubs() {
+    return this.clubService.getClubs();
   }
 
   @Post()
-  addUser(@Body() club: Club) {
-    return this.userService.addClub(club);
+  addClub(@Body() club: Club) {
+    return this.clubService.addClub(club);
   }
 }
