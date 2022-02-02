@@ -18,4 +18,9 @@ export class UserService {
     this.usersRepository.insert(user);
     return user;
   }
+
+  async findOne(username: string): Promise<User | undefined> {
+    // return this.usersRepository.find(user => user.username === username);
+    return this.usersRepository.findOne({ username: username } );
+  }
 }
