@@ -10,19 +10,19 @@ export class User {
     type: 'varchar',
     length: 300,
     nullable: false,
-    unique: true
+    unique: true,
   })
   username: string;
 
   @Column({
     type: 'varchar',
-    nullable: false
+    nullable: false,
   })
   password: string;
 
   @Column({
-      type: 'varchar',
-      nullable: false
+    type: 'varchar',
+    nullable: false,
   })
   email: string;
 
