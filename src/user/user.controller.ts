@@ -10,9 +10,9 @@ export class UserController {
     return await this.userService.getUsers();
   }
 
-  @Get(':username')
-  async getUser(@Param('username') username: string): Promise<IUser> {
-    return await this.userService.findOne(username);
+  @Get(':id')
+  async getUser(@Param('id') id: string): Promise<IUser> {
+    return await this.userService.findOne(id);
   }
 
   @Post()

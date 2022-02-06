@@ -17,54 +17,49 @@ export class UserService {
   }
 
   async addUser(userRequest: IUserCreateRequest): Promise<IUser> {
-    const { username, password, email } = userRequest;
-
     // check if the user exists in the db
+    const { email } = userRequest;
     const userInDb = await this.usersRepository.findOne({
-      where: { username },
+      where: { email },
     });
     if (userInDb) {
       throw new HttpException('User already exists', HttpStatus.BAD_REQUEST);
     }
 
     const newUser: UserEntity = await this.usersRepository.create({
-      username,
-      password,
-      email,
+      ...userRequest,
     });
     await this.usersRepository.save(newUser);
     return this.toUserResult(newUser); // remove the password before returning to the user
   }
 
-  async findOne(username: string): Promise<IUser | undefined> {
-    const user = await this.usersRepository.findOne({ username: username });
+  async findOne(id: string): Promise<IUser | undefined> {
+    const user = await this.usersRepository.findOne({ id: id });
     return user ? this.toUserResult(user) : undefined;
   }
 
   async findByPayload(email: string, pass: string): Promise<IUser | undefined> {
     const user = await this.usersRepository.findOne({ email: email });
     if (user && (await bcrypt.compare(pass, user.password))) {
-      const { password, ...result } = user;
-      return result;
+      return this.toUserResult(user);
     }
     return undefined;
   }
 
-  toUserResult(user: UserEntity): IUser {
-    return {
-      username: user.username,
-      email: user.email,
-    };
+  toUserResult(userEntity: UserEntity): IUser {
+    const { password, ...result } = userEntity;
+    return result;
   }
 }
 
 export interface IUser {
-  username: string;
   email: string;
+  firstName: string;
+  lastName: string;
+  city?: string;
+  state?: string;
 }
 
 export interface IUserCreateRequest extends IUser {
-  username: string;
   password: string;
-  email: string;
 }
