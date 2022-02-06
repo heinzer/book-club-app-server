@@ -17,7 +17,6 @@ export class UserController {
 
   @Post()
   async addUser(@Body() createUserRequest: IUserCreateRequest): Promise<IUser> {
-    console.log('Calling addUser()');
     return await this.userService.addUser(createUserRequest);
   }
 }
