@@ -14,9 +14,4 @@ export class UserController {
   async getUser(@Param('id') id: string): Promise<IUser> {
     return await this.userService.findOne(id);
   }
-
-  @Post()
-  async addUser(@Body() createUserRequest: IUserCreateRequest): Promise<IUser> {
-    return await this.userService.addUser(createUserRequest);
-  }
 }

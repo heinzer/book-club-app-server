@@ -1,14 +1,16 @@
-import { Controller, Get, Request, Post, UseGuards } from '@nestjs/common';
+import { Controller, Get, Request, Post, UseGuards, Body } from '@nestjs/common';
 import { AppService } from './app.service';
 import { LocalAuthGuard } from './auth/local-auth.guard';
 import { Public } from './auth/jwt-auth.guard';
 import { AuthService } from './auth/auth.service';
+import { IUser, IUserCreateRequest, UserService } from './user/user.service';
 
 @Controller()
 export class AppController {
   constructor(
     private readonly appService: AppService,
     private authService: AuthService,
+    private readonly userService: UserService,
   ) {}
 
   @UseGuards(LocalAuthGuard)
@@ -21,5 +23,11 @@ export class AppController {
   @Get('profile')
   getProfile(@Request() req) {
     return req.user;
+  }
+
+  @Public()
+  @Post('register')
+  async registerUser(@Body() createUserRequest: IUserCreateRequest): Promise<IUser> {
+    return await this.userService.addUser(createUserRequest);
   }
 }
