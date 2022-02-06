@@ -27,7 +27,12 @@ export class AppController {
 
   @Public()
   @Post('register')
-  async registerUser(@Body() createUserRequest: IUserCreateRequest): Promise<IUser> {
-    return await this.userService.addUser(createUserRequest);
+  async registerUser(@Body() createUserRequest: IUserCreateRequest) {
+    const user = await this.userService.addUser(createUserRequest);
+    const token = await this.authService.login(user);
+    return {
+      ...user,
+      ...token,
+    };
   }
 }
