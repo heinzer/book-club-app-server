@@ -57,3 +57,20 @@ export class UserEntity {
     this.password = await bcrypt.hash(this.password, 10);
   }
 }
+
+export interface IUser {
+  email: string;
+  firstName: string;
+  lastName?: string;
+  city?: string;
+  state?: string;
+}
+
+export interface IUserCreateRequest extends IUser {
+  password: string;
+}
+
+export function toUserResult(userEntity: UserEntity): IUser {
+  const { password, ...result } = userEntity;
+  return result;
+}

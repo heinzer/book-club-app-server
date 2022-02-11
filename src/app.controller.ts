@@ -10,7 +10,8 @@ import { AppService } from './app.service';
 import { LocalAuthGuard } from './auth/local-auth.guard';
 import { Public } from './auth/jwt-auth.guard';
 import { AuthService } from './auth/auth.service';
-import { IUser, IUserCreateRequest, UserService } from './user/user.service';
+import { IUserCreateRequest } from './user/user.entity';
+import { UserService } from './user/user.service';
 
 @Controller()
 export class AppController {

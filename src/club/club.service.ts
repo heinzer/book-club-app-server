@@ -14,8 +14,12 @@ export class ClubService {
     return this.clubRepository.find();
   }
 
-  addClub(club): Promise<Club> {
-    this.clubRepository.insert(club);
+  async findOne(id: string): Promise<Club | undefined> {
+    return await this.clubRepository.findOne({ id: id });
+  }
+
+  async addClub(club): Promise<Club> {
+    await this.clubRepository.insert(club);
     return club;
   }
 }

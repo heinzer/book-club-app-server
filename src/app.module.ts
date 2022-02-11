@@ -5,6 +5,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { ClubModule } from './club/club.module';
+import { MembershipModule } from './memberships/membership.module';
 import { UserModule } from './user/user.module';
 import { AuthModule } from './auth/auth.module';
 import { JwtAuthGuard } from './auth/jwt-auth.guard';
@@ -25,6 +26,7 @@ import { JwtAuthGuard } from './auth/jwt-auth.guard';
       autoLoadEntities: true,
     }),
     ClubModule,
+    MembershipModule,
     UserModule,
     AuthModule,
   ],

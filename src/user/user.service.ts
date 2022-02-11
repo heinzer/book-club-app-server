@@ -2,7 +2,7 @@ import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import * as bcrypt from 'bcrypt';
 import { Repository } from 'typeorm';
-import { UserEntity } from './user.entity';
+import { IUser, IUserCreateRequest, toUserResult, UserEntity } from './user.entity';
 
 @Injectable()
 export class UserService {
@@ -13,7 +13,7 @@ export class UserService {
 
   async getUsers(): Promise<IUser[]> {
     const users = await this.usersRepository.find();
-    return users.map((user) => this.toUserResult(user));
+    return users.map((user) => toUserResult(user));
   }
 
   async addUser(userRequest: IUserCreateRequest): Promise<IUser> {
@@ -30,36 +30,19 @@ export class UserService {
       ...userRequest,
     });
     await this.usersRepository.save(newUser);
-    return this.toUserResult(newUser); // remove the password before returning to the user
+    return toUserResult(newUser); // remove the password before returning to the user
   }
 
   async findOne(id: string): Promise<IUser | undefined> {
     const user = await this.usersRepository.findOne({ id: id });
-    return user ? this.toUserResult(user) : undefined;
+    return user ? toUserResult(user) : undefined;
   }
 
   async findByPayload(email: string, pass: string): Promise<IUser | undefined> {
     const user = await this.usersRepository.findOne({ email: email });
     if (user && (await bcrypt.compare(pass, user.password))) {
-      return this.toUserResult(user);
+      return toUserResult(user);
     }
     return undefined;
   }
-
-  toUserResult(userEntity: UserEntity): IUser {
-    const { password, ...result } = userEntity;
-    return result;
-  }
-}
-
-export interface IUser {
-  email: string;
-  firstName: string;
-  lastName?: string;
-  city?: string;
-  state?: string;
-}
-
-export interface IUserCreateRequest extends IUser {
-  password: string;
 }
