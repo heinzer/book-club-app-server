@@ -1,24 +1,24 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { Club } from './club.entity';
+import { ClubEntity } from './club.entity';
 
 @Injectable()
 export class ClubService {
   constructor(
-    @InjectRepository(Club)
-    private clubRepository: Repository<Club>,
+    @InjectRepository(ClubEntity)
+    private clubRepository: Repository<ClubEntity>,
   ) {}
 
-  getClubs(): Promise<Club[]> {
+  getClubs(): Promise<ClubEntity[]> {
     return this.clubRepository.find();
   }
 
-  async findOne(id: string): Promise<Club | undefined> {
+  async findOne(id: string): Promise<ClubEntity | undefined> {
     return await this.clubRepository.findOne({ id: id });
   }
 
-  async addClub(club): Promise<Club> {
+  async addClub(club): Promise<ClubEntity> {
     await this.clubRepository.insert(club);
     return club;
   }

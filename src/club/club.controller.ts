@@ -1,7 +1,8 @@
 import { Body, Controller, Get, Param, Post } from '@nestjs/common';
 import { MembershipEntity } from '../memberships/membership.entity';
 import { MembershipService } from '../memberships/membership.service';
-import { Club } from './club.entity';
+import { IUser } from '../user/user.entity';
+import { ClubEntity } from './club.entity';
 import { ClubService } from './club.service';
 
 @Controller('clubs')
@@ -17,19 +18,17 @@ export class ClubController {
   }
 
   @Get('id')
-  getClub(@Param('id') id: string): Promise<Club | undefined> {
+  getClub(@Param('id') id: string): Promise<ClubEntity | undefined> {
     return this.clubService.findOne(id);
   }
 
   @Post()
-  addClub(@Body() club: Club) {
+  addClub(@Body() club: ClubEntity) {
     return this.clubService.addClub(club);
   }
 
   @Get(':id/memberships')
-  async getClubMemberships(
-    @Param('id') id: string,
-  ): Promise<MembershipEntity[]> {
+  async getClubMemberships(@Param('id') id: string): Promise<IUser[]> {
     return await this.membershipService.findMembershipsByClub(id);
   }
 }
