@@ -2,7 +2,12 @@ import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import * as bcrypt from 'bcrypt';
 import { Repository } from 'typeorm';
-import { IUser, IUserCreateRequest, toUserResult, UserEntity } from './user.entity';
+import {
+  IUser,
+  IUserCreateRequest,
+  toUserResult,
+  UserEntity,
+} from './user.entity';
 
 @Injectable()
 export class UserService {
