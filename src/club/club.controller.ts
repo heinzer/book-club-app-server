@@ -23,7 +23,7 @@ export class ClubController {
   }
 
   @Post()
-  addClub(@Body() club: ClubEntity) {
+  addClub(@Body() club: ClubCreationRequest) {
     return this.clubService.addClub(club);
   }
 
@@ -31,4 +31,9 @@ export class ClubController {
   async getClubMemberships(@Param('id') id: string): Promise<IUser[]> {
     return await this.membershipService.findMembershipsByClub(id);
   }
+}
+
+export interface ClubCreationRequest {
+  adminId: string;
+  name: string;
 }
