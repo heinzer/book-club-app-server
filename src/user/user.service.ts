@@ -55,7 +55,7 @@ export class UserService {
 export interface IUser {
   email: string;
   firstName: string;
-  lastName: string;
+  lastName?: string;
   city?: string;
   state?: string;
 }
