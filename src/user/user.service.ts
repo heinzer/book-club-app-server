@@ -43,10 +43,14 @@ export class UserService {
     return user ? toUserResult(user) : undefined;
   }
 
+  async findByEmail(email: string): Promise<IUser | undefined> {
+    const user = await this.usersRepository.findOne({ email: email });
+    return user ? toUserResult(user) : undefined;
+  }
+
   async findByPayload(email: string, pass: string): Promise<IUser | undefined> {
-    const user = await this.usersRepository.findOne({
-      where: { email: email },
-    });
+    console.log('finding by payload');
+    const user = await this.usersRepository.findOne({ email: email });
     if (user && (await bcrypt.compare(pass, user.password))) {
       return toUserResult(user);
     }

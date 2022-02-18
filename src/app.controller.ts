@@ -29,8 +29,8 @@ export class AppController {
   }
 
   @Get('profile')
-  getProfile(@Request() req) {
-    return req.user;
+  async getProfile(@Request() req) {
+    return await this.userService.findByEmail(req.user.email);
   }
 
   @Public()
