@@ -44,7 +44,9 @@ export class UserService {
   }
 
   async findByPayload(email: string, pass: string): Promise<IUser | undefined> {
-    const user = await this.usersRepository.findOne({ email: email });
+    const user = await this.usersRepository.findOne({
+      where: { email: email },
+    });
     if (user && (await bcrypt.compare(pass, user.password))) {
       return toUserResult(user);
     }
