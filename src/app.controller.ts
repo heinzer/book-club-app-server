@@ -10,7 +10,7 @@ import { AppService } from './app.service';
 import { LocalAuthGuard } from './auth/local-auth.guard';
 import { Public } from './auth/jwt-auth.guard';
 import { AuthService } from './auth/auth.service';
-import { IUserCreateRequest } from './user/user.entity';
+import { IUser, IUserCreateRequest } from './user/user.entity';
 import { UserService } from './user/user.service';
 
 @Controller()
@@ -25,7 +25,12 @@ export class AppController {
   @Public()
   @Post('login')
   async login(@Request() req) {
-    return this.authService.login(req.user);
+    const token = await this.authService.login(req.user);
+    const user: IUser = await this.userService.findByEmail(req.user.email);
+    return {
+      ...user,
+      ...token,
+    };
   }
 
   @Get('profile')
