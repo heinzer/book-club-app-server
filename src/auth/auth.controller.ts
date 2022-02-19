@@ -36,7 +36,7 @@ export class AuthController {
   @Post('register')
   async registerUser(@Body() createUserRequest: UserCreateRequest) {
     const authedUser = new AuthedUser();
-    const user = await this.userService.addUser(createUserRequest);
+    const user = await this.userService.createUser(createUserRequest);
     Object.assign(authedUser, user);
     authedUser.access_token = await this.authService.login(user);
     return authedUser;

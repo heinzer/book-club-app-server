@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { ClubEntity } from '../club/club.entity';
@@ -42,5 +42,24 @@ export class MembershipService {
       }
     }
     return users;
+  }
+
+  async createMembership(userId: string, clubId: string): Promise<MembershipEntity> {
+    const membershipInDb = await this.membershipRepository.findOne({
+      where: { userId: userId },
+    });
+    if (membershipInDb) {
+      throw new HttpException(
+        'Membership already exists',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+
+    const newMembership: MembershipEntity =
+      await this.membershipRepository.create({
+        userId,
+        clubId,
+      });
+    return await this.membershipRepository.save(newMembership);
   }
 }

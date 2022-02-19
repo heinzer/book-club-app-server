@@ -24,8 +24,8 @@ export class ClubController {
   }
 
   @Post()
-  async addClub(@Body() club: ClubCreationRequest): Promise<ClubEntity> {
-    return await this.clubService.addClub(club);
+  async createClub(@Body() club: ClubCreationRequest): Promise<ClubEntity> {
+    return await this.clubService.createClub(club);
   }
 
   @Get(':id/memberships')

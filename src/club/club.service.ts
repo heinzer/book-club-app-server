@@ -22,7 +22,7 @@ export class ClubService {
     return await this.clubRepository.findOne({ id: id });
   }
 
-  async addClub(club: ClubCreationRequest): Promise<ClubEntity> {
+  async createClub(club: ClubCreationRequest): Promise<ClubEntity> {
     const newClub: ClubEntity = this.clubRepository.create({ ...club });
     await this.clubRepository.save(newClub);
 

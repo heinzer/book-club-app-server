@@ -4,6 +4,7 @@ import { APP_GUARD } from '@nestjs/core';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ClubModule } from './club/club.module';
 import { MembershipModule } from './memberships/membership.module';
+import { ThemeModule } from './theme/theme.module';
 import { UserModule } from './user/user.module';
 import { AuthModule } from './auth/auth.module';
 import { JwtAuthGuard } from './auth/jwt-auth.guard';
@@ -24,6 +25,7 @@ import { JwtAuthGuard } from './auth/jwt-auth.guard';
     AuthModule,
     ClubModule,
     MembershipModule,
+    ThemeModule,
     UserModule,
   ],
   providers: [

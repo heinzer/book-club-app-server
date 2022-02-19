@@ -21,7 +21,7 @@ export class UserService {
     return users.map((user) => toUserResult(user));
   }
 
-  async addUser(userRequest: UserCreateRequest): Promise<User> {
+  async createUser(userRequest: UserCreateRequest): Promise<User> {
     // check if the user exists in the db
     const { email } = userRequest;
     const userInDb = await this.usersRepository.findOne({
