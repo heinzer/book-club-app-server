@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { ClubEntity } from '../club/club.entity';
-import { IUser, toUserResult, UserEntity } from '../user/user.entity';
+import { toUserResult, User, UserEntity } from '../user/user.entity';
 import { MembershipEntity } from './membership.entity';
 
 @Injectable()
@@ -30,11 +30,11 @@ export class MembershipService {
     return clubs;
   }
 
-  async findMembershipsByClub(clubId: string): Promise<IUser[]> {
+  async findMembershipsByClub(clubId: string): Promise<User[]> {
     const memberships: MembershipEntity[] =
       await this.membershipRepository.find({ clubId: clubId });
 
-    const users: IUser[] = [];
+    const users: User[] = [];
     for (const membership of memberships) {
       const user = await this.userRepository.findOne({ id: membership.userId });
       if (user) {

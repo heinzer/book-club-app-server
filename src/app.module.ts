@@ -2,8 +2,6 @@ import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { APP_GUARD } from '@nestjs/core';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
 import { ClubModule } from './club/club.module';
 import { MembershipModule } from './memberships/membership.module';
 import { UserModule } from './user/user.module';
@@ -12,8 +10,6 @@ import { JwtAuthGuard } from './auth/jwt-auth.guard';
 
 @Module({
   imports: [
-    ClubModule,
-    UserModule,
     ConfigModule.forRoot(),
     TypeOrmModule.forRoot({
       url: process.env.DATABASE_URL,
@@ -25,14 +21,12 @@ import { JwtAuthGuard } from './auth/jwt-auth.guard';
       synchronize: true, // This for development
       autoLoadEntities: true,
     }),
+    AuthModule,
     ClubModule,
     MembershipModule,
     UserModule,
-    AuthModule,
   ],
-  controllers: [AppController],
   providers: [
-    AppService,
     {
       provide: APP_GUARD,
       useClass: JwtAuthGuard,

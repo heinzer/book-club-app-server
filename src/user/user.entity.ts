@@ -1,3 +1,4 @@
+import { ApiProperty } from '@nestjs/swagger';
 import {
   Entity,
   Column,
@@ -9,9 +10,11 @@ import * as bcrypt from 'bcrypt';
 
 @Entity({ name: 'user' })
 export class UserEntity {
+  @ApiProperty()
   @PrimaryGeneratedColumn()
   id: string;
 
+  @ApiProperty()
   @Column({
     type: 'varchar',
     nullable: false,
@@ -19,36 +22,42 @@ export class UserEntity {
   })
   email: string;
 
+  @ApiProperty()
   @Column({
     type: 'varchar',
     nullable: false,
   })
   password: string;
 
+  @ApiProperty()
   @Column({
     type: 'varchar',
     nullable: false,
   })
   firstName: string;
 
+  @ApiProperty()
   @Column({
     type: 'varchar',
     nullable: true,
   })
   lastName: string;
 
+  @ApiProperty()
   @Column({
     type: 'varchar',
     nullable: true,
   })
   city: string;
 
+  @ApiProperty()
   @Column({
     type: 'varchar',
     nullable: true,
   })
   state: string;
 
+  @ApiProperty()
   @CreateDateColumn()
   createdDate: Date;
 
@@ -58,19 +67,22 @@ export class UserEntity {
   }
 }
 
-export interface IUser {
-  email: string;
-  firstName: string;
-  lastName?: string;
-  city?: string;
-  state?: string;
-}
-
-export interface IUserCreateRequest extends IUser {
-  password: string;
-}
-
-export function toUserResult(userEntity: UserEntity): IUser {
-  const { password, ...result } = userEntity;
+export function toUserResult(userEntity: UserEntity): User {
+  // const { password, ...result } = userEntity;
+  const result = new User();
+  Object.assign(result, userEntity);
   return result;
+}
+
+const Omit = <T, K extends keyof T>(
+  Class: new () => T,
+  keys: K[],
+): new () => Omit<T, typeof keys[number]> => Class;
+
+export class User extends Omit(UserEntity, ['password']) {}
+
+export class UserCreateRequest extends Omit(UserEntity, ['id']) {}
+
+export class AuthedUser extends User {
+  access_token: string;
 }

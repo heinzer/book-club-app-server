@@ -1,10 +1,11 @@
 import { Body, Controller, Get, Param, Post } from '@nestjs/common';
-import { MembershipEntity } from '../memberships/membership.entity';
+import { ApiTags } from '@nestjs/swagger';
 import { MembershipService } from '../memberships/membership.service';
-import { IUser } from '../user/user.entity';
+import { User } from '../user/user.entity';
 import { ClubEntity } from './club.entity';
 import { ClubService } from './club.service';
 
+@ApiTags('clubs')
 @Controller('clubs')
 export class ClubController {
   constructor(
@@ -23,12 +24,12 @@ export class ClubController {
   }
 
   @Post()
-  addClub(@Body() club: ClubCreationRequest) {
-    return this.clubService.addClub(club);
+  async addClub(@Body() club: ClubCreationRequest): Promise<ClubEntity> {
+    return await this.clubService.addClub(club);
   }
 
   @Get(':id/memberships')
-  async getClubMemberships(@Param('id') id: string): Promise<IUser[]> {
+  async getClubMemberships(@Param('id') id: string): Promise<User[]> {
     return await this.membershipService.findMembershipsByClub(id);
   }
 }

@@ -3,9 +3,9 @@ import { InjectRepository } from '@nestjs/typeorm';
 import * as bcrypt from 'bcrypt';
 import { Repository } from 'typeorm';
 import {
-  IUser,
-  IUserCreateRequest,
+  UserCreateRequest,
   toUserResult,
+  User,
   UserEntity,
 } from './user.entity';
 
@@ -16,12 +16,12 @@ export class UserService {
     private usersRepository: Repository<UserEntity>,
   ) {}
 
-  async getUsers(): Promise<IUser[]> {
+  async getUsers(): Promise<User[]> {
     const users = await this.usersRepository.find();
     return users.map((user) => toUserResult(user));
   }
 
-  async addUser(userRequest: IUserCreateRequest): Promise<IUser> {
+  async addUser(userRequest: UserCreateRequest): Promise<User> {
     // check if the user exists in the db
     const { email } = userRequest;
     const userInDb = await this.usersRepository.findOne({
@@ -38,17 +38,17 @@ export class UserService {
     return toUserResult(newUser); // remove the password before returning to the user
   }
 
-  async findOne(id: string): Promise<IUser | undefined> {
+  async findOne(id: string): Promise<User | undefined> {
     const user = await this.usersRepository.findOne({ id: id });
     return user ? toUserResult(user) : undefined;
   }
 
-  async findByEmail(email: string): Promise<IUser | undefined> {
+  async findByEmail(email: string): Promise<User | undefined> {
     const user = await this.usersRepository.findOne({ email: email });
     return user ? toUserResult(user) : undefined;
   }
 
-  async findByPayload(email: string, pass: string): Promise<IUser | undefined> {
+  async findByPayload(email: string, pass: string): Promise<User | undefined> {
     const user = await this.usersRepository.findOne({ email: email });
     if (user && (await bcrypt.compare(pass, user.password))) {
       return toUserResult(user);

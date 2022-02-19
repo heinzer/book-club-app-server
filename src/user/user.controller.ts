@@ -1,28 +1,35 @@
-import { Controller, Get, Param, Post } from '@nestjs/common';
+import { Controller, Get, Param, Post, Request } from '@nestjs/common';
+import { ApiTags } from '@nestjs/swagger';
 import { ClubEntity } from '../club/club.entity';
 import { MembershipService } from '../memberships/membership.service';
-import { IUser } from './user.entity';
+import { User } from './user.entity';
 import { UserService } from './user.service';
 
-@Controller('users')
+@ApiTags('users')
+@Controller()
 export class UserController {
   constructor(
     private readonly userService: UserService,
     private readonly membershipService: MembershipService,
   ) {}
 
-  @Get()
-  async getUsers(): Promise<IUser[]> {
+  @Get('users')
+  async getUsers(): Promise<User[]> {
     return await this.userService.getUsers();
   }
 
-  @Get(':id')
-  async getUser(@Param('id') id: string): Promise<IUser> {
+  @Get('users/:id')
+  async getUser(@Param('id') id: string): Promise<User> {
     return await this.userService.findOne(id);
   }
 
-  @Get(':id/memberships')
+  @Get('users/:id/memberships')
   async getUserMemberships(@Param('id') id: string): Promise<ClubEntity[]> {
     return await this.membershipService.findMembershipsByUser(id);
+  }
+
+  @Get('profile')
+  async getUserByEmail(@Request() req) {
+    return await this.userService.findByEmail(req.user.email);
   }
 }
