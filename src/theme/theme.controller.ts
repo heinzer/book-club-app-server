@@ -8,11 +8,6 @@ import { ThemeService } from './theme.service';
 export class ThemeController {
   constructor(private themeService: ThemeService) {}
 
-  @Get()
-  async getThemes(@Query('clubId') clubId: string): Promise<ThemeEntity[]> {
-    return await this.themeService.getThemes(clubId);
-  }
-
   @Get(':id')
   async getTheme(@Param('id') id: string): Promise<ThemeEntity> {
     return await this.themeService.getTheme(id);

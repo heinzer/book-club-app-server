@@ -37,8 +37,13 @@ export class ClubController {
   }
 
   @Get(':id/current-theme')
-  async getCurrentTheme(@Param('clubId') clubId: string): Promise<ThemeEntity> {
-    return await this.themeService.getCurrentTheme(clubId);
+  async getCurrentTheme(@Param('id') id: string): Promise<ThemeEntity> {
+    return await this.themeService.getCurrentTheme(id);
+  }
+
+  @Get(':id/themes')
+  async getThemes(@Query('id') id: string): Promise<ThemeEntity[]> {
+    return await this.themeService.getThemes(id);
   }
 }
 
