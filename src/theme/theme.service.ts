@@ -24,7 +24,7 @@ export class ThemeService {
    */
   async getCurrentTheme(clubId: string): Promise<ThemeEntity> {
     const openThemes: ThemeEntity[] = await this.themeRepository.find({ status: ThemeStatus.OPEN });
-    const openFutureThemes: ThemeEntity[] = openThemes.filter(theme => theme.discussionDeadline < new Date());
+    const openFutureThemes: ThemeEntity[] = openThemes.filter(theme => theme.discussionDeadline >= new Date());
     if (openFutureThemes.length > 1) {
       return openFutureThemes.reduce(function (a, b) { return a.discussionDeadline < b.discussionDeadline ? a : b; });
     } else {
