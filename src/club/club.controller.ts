@@ -1,6 +1,8 @@
-import { Body, Controller, Get, Param, Post } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Query } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { MembershipService } from '../memberships/membership.service';
+import { ThemeEntity } from '../theme/theme.entity';
+import { ThemeService } from '../theme/theme.service';
 import { User } from '../user/user.entity';
 import { ClubEntity } from './club.entity';
 import { ClubService } from './club.service';
@@ -11,6 +13,7 @@ export class ClubController {
   constructor(
     private readonly clubService: ClubService,
     private readonly membershipService: MembershipService,
+    private themeService: ThemeService,
   ) {}
 
   @Get()
@@ -31,6 +34,11 @@ export class ClubController {
   @Get(':id/memberships')
   async getClubMemberships(@Param('id') id: string): Promise<User[]> {
     return await this.membershipService.findMembershipsByClub(id);
+  }
+
+  @Get(':id/current-theme')
+  async getCurrentTheme(@Param('clubId') clubId: string): Promise<ThemeEntity> {
+    return await this.themeService.getCurrentTheme(clubId);
   }
 }
 

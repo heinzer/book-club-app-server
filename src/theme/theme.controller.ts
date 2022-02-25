@@ -4,26 +4,21 @@ import { ThemeEntity, ThemeRequest } from './theme.entity';
 import { ThemeService } from './theme.service';
 
 @ApiTags('themes')
-@Controller()
+@Controller('themes')
 export class ThemeController {
   constructor(private themeService: ThemeService) {}
 
-  @Get('themes')
+  @Get()
   async getThemes(@Query('clubId') clubId: string): Promise<ThemeEntity[]> {
     return await this.themeService.getThemes(clubId);
   }
 
-  @Get('themes/:id')
+  @Get(':id')
   async getTheme(@Param('id') id: string): Promise<ThemeEntity> {
     return await this.themeService.getTheme(id);
   }
 
-  @Get('currentTheme')
-  async getCurrentTheme(@Query('clubId') clubId: string): Promise<ThemeEntity> {
-    return await this.themeService.getCurrentTheme(clubId);
-  }
-
-  @Post('themes')
+  @Post()
   async createTheme(@Body() theme: ThemeRequest): Promise<ThemeEntity> {
     return await this.themeService.createTheme(theme);
   }
