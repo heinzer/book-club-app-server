@@ -18,14 +18,17 @@ export class ThemeService {
     return await this.themeRepository.findOne({ id: id });
   }
 
+  /**
+   * Finds the earliest open future theme.
+   * @param clubId
+   */
   async getCurrentTheme(clubId: string): Promise<ThemeEntity> {
     const openThemes: ThemeEntity[] = await this.themeRepository.find({ status: ThemeStatus.OPEN });
-    if (openThemes.length > 1) {
-      return openThemes
-        .filter(theme => theme.discussionDeadline < new Date())
-        .reduce(function (a, b) { return a.discussionDeadline < b.discussionDeadline ? a : b; });
+    const openFutureThemes: ThemeEntity[] = openThemes.filter(theme => theme.discussionDeadline < new Date());
+    if (openFutureThemes.length > 1) {
+      return openFutureThemes.reduce(function (a, b) { return a.discussionDeadline < b.discussionDeadline ? a : b; });
     } else {
-      return openThemes[0];
+      return openFutureThemes[0];
     }
   }
 
