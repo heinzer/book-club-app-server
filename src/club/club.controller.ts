@@ -21,7 +21,7 @@ export class ClubController {
     return this.clubService.getClubs();
   }
 
-  @Get('id')
+  @Get(':id')
   getClub(@Param('id') id: string): Promise<ClubEntity | undefined> {
     return this.clubService.findOne(id);
   }
