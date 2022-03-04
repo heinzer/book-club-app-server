@@ -42,7 +42,7 @@ export class ClubController {
   }
 
   @Get(':id/themes')
-  async getThemes(@Query('id') id: string): Promise<ThemeEntity[]> {
+  async getThemes(@Param('id') id: string): Promise<ThemeEntity[]> {
     return await this.themeService.getThemes(id);
   }
 }
