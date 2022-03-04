@@ -68,10 +68,8 @@ export class UserEntity {
 }
 
 export function toUserResult(userEntity: UserEntity): User {
-  // const { password, ...result } = userEntity;
-  const result = new User();
-  Object.assign(result, userEntity);
-  return result;
+  const { password, ...result } = userEntity;
+  return result as User;
 }
 
 export const Omit = <T, K extends keyof T>(
