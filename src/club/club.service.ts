@@ -1,7 +1,7 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { MembershipEntity } from '../memberships/membership.entity';
+import { MembershipEntity } from '../membership/membership.entity';
 import { ClubCreationRequest } from './club.controller';
 import { ClubEntity } from './club.entity';
 

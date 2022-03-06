@@ -1,7 +1,7 @@
 import { Controller, Get, Param, Post, Request } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { ClubEntity } from '../club/club.entity';
-import { MembershipService } from '../memberships/membership.service';
+import { MembershipService } from '../membership/membership.service';
 import { User } from './user.entity';
 import { UserService } from './user.service';
 

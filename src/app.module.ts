@@ -2,8 +2,9 @@ import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { APP_GUARD } from '@nestjs/core';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { BookModule } from './book/book.module';
 import { ClubModule } from './club/club.module';
-import { MembershipModule } from './memberships/membership.module';
+import { MembershipModule } from './membership/membership.module';
 import { ThemeModule } from './theme/theme.module';
 import { UserModule } from './user/user.module';
 import { AuthModule } from './auth/auth.module';
@@ -23,6 +24,7 @@ import { JwtAuthGuard } from './auth/jwt-auth.guard';
       autoLoadEntities: true,
     }),
     AuthModule,
+    BookModule,
     ClubModule,
     MembershipModule,
     ThemeModule,

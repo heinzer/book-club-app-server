@@ -1,6 +1,6 @@
 import { Body, Controller, Get, Param, Post, Query } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
-import { MembershipService } from '../memberships/membership.service';
+import { MembershipService } from '../membership/membership.service';
 import { ThemeEntity } from '../theme/theme.entity';
 import { ThemeService } from '../theme/theme.service';
 import { User } from '../user/user.entity';
