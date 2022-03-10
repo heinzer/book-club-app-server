@@ -4,6 +4,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { lastValueFrom, map, Observable } from 'rxjs';
 import { Repository } from 'typeorm';
 import { NominationEntity } from '../nomination/nomination.entity';
+import { getTheme, ThemeEntity } from '../theme/theme.entity';
 import { NominateBookRequest, Book, BookEntity, ExternalBookEntity } from './book.entity';
 
 @Injectable()
@@ -13,10 +14,14 @@ export class BookService {
     private bookRepository: Repository<BookEntity>,
     @InjectRepository(NominationEntity)
     private nominationRepository: Repository<NominationEntity>,
+    @InjectRepository(ThemeEntity)
+    private themeRepository: Repository<ThemeEntity>,
     private httpService: HttpService,
   ) {}
 
   async getBooks(themeId: string): Promise<Book[]> {
+    await getTheme(this.themeRepository, themeId); // validate that the theme is not soft deleted
+
     const nominations: NominationEntity[] =
       await this.nominationRepository.find({ themeId: themeId });
     console.log(`Nominations: ${JSON.stringify(nominations)}`);
@@ -46,6 +51,7 @@ export class BookService {
   }
 
   async nominateBook(addBookRequest: NominateBookRequest): Promise<Book> {
+    await getTheme(this.themeRepository, addBookRequest.themeId); // validate that the theme is not soft deleted
     // todo: throw an error if the nomination phase is closed?
 
     const result: Book = {
@@ -58,7 +64,6 @@ export class BookService {
     const existingBook = await this.bookRepository.findOne({
       where: { workId: addBookRequest.workId },
     });
-    console.log(`existing book: ${JSON.stringify(existingBook)}`);
 
     if (!existingBook) {
       const newBook = await this.bookRepository.create({
@@ -67,7 +72,6 @@ export class BookService {
         triggerWarnings: addBookRequest.triggerWarnings,
       });
       result.book = newBook;
-      console.log(`new book: ${JSON.stringify(newBook)}`);
 
       await this.bookRepository.save(newBook);
     } else {
@@ -75,14 +79,12 @@ export class BookService {
     }
 
     result.externalBookData = await this.getExternalBook(result.book.workId);
-    console.log(`external Book data: ${result.externalBookData}`);
 
     // create new nomination entry
     // see if nomination already exists
     const existingNomination = await this.nominationRepository.findOne({
       where: { themeId: addBookRequest.themeId, bookId: result.book.id },
     });
-    console.log(`existing nomination: ${JSON.stringify(existingNomination)}`);
 
     if (!existingNomination) {
       const newNomination: NominationEntity =
@@ -92,11 +94,9 @@ export class BookService {
           nominatorId: addBookRequest.nominatorId,
         });
       result.nomination = newNomination;
-      console.log(`new nomination: ${JSON.stringify(newNomination)}`);
       await this.nominationRepository.save(newNomination);
     } else {
       result.nomination = existingNomination;
-      // todo: throw error if it already exists??
     }
     return result;
   }

@@ -1,5 +1,6 @@
+import { HttpException, HttpStatus } from '@nestjs/common';
 import { ApiProperty } from '@nestjs/swagger';
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, PrimaryGeneratedColumn, Repository } from 'typeorm';
 import { Omit } from '../user/user.entity';
 
 @Entity({ name: 'theme' })
@@ -77,6 +78,25 @@ export class ThemeEntity {
     nullable: false,
   })
   discussionDeadline: Date;
+
+  @ApiProperty()
+  @Column({
+    type: 'boolean',
+    default: false,
+    nullable: false,
+  })
+  isSoftDeleted: boolean;
+}
+
+export async function getTheme(
+  themeRepository: Repository<ThemeEntity>,
+  id: string,
+): Promise<ThemeEntity> {
+  const theme = await themeRepository.findOne({ id: id });
+  if (!theme || theme?.isSoftDeleted === true) {
+    throw new HttpException('Theme not found', HttpStatus.NOT_FOUND);
+  }
+  return theme;
 }
 
 export class ThemeRequest extends Omit(ThemeEntity, ['id']) {}

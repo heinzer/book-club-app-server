@@ -1,7 +1,7 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { ThemeEntity, ThemeRequest, ThemeStatus } from './theme.entity';
+import { getTheme, ThemeEntity, ThemeRequest, ThemeStatus } from './theme.entity';
 
 @Injectable()
 export class ThemeService {
@@ -11,11 +11,22 @@ export class ThemeService {
   ) {}
 
   async getThemes(clubId: string): Promise<ThemeEntity[]> {
-    return await this.themeRepository.find({ clubId: clubId });
+    return await this.themeRepository.find({
+      clubId: clubId,
+      isSoftDeleted: false,
+    });
   }
 
   async getTheme(id: string): Promise<ThemeEntity> {
-    return await this.themeRepository.findOne({ id: id });
+    return await getTheme(this.themeRepository, id);
+  }
+
+  async deleteTheme(id: string): Promise<void> {
+    const theme = await this.getTheme(id);
+    await this.themeRepository.save({
+      ...theme,
+      isSoftDeleted: true,
+    });
   }
 
   /**
@@ -26,6 +37,7 @@ export class ThemeService {
     const openThemes: ThemeEntity[] = await this.themeRepository.find({
       clubId: clubId,
       status: ThemeStatus.OPEN,
+      isSoftDeleted: false,
     });
     const openFutureThemes: ThemeEntity[] = openThemes.filter(theme => theme.discussionDeadline >= new Date());
     if (openFutureThemes.length > 1) {
