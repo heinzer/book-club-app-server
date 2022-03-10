@@ -34,6 +34,7 @@ export class ClubService {
     await this.membershipRepository.insert({
       clubId: newClub.id,
       userId: club.adminId,
+      isAdmin: true,
     });
 
     return newClub;
