@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Post, Query } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, Put, Query } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { MembershipService } from '../membership/membership.service';
 import { ThemeEntity } from '../theme/theme.entity';
@@ -23,12 +23,23 @@ export class ClubController {
 
   @Get(':id')
   getClub(@Param('id') id: string): Promise<ClubEntity | undefined> {
-    return this.clubService.findOne(id);
+    return this.clubService.findClub(id);
   }
 
   @Post()
   async createClub(@Body() club: ClubCreationRequest): Promise<ClubEntity> {
     return await this.clubService.createClub(club);
+  }
+
+  @Put(':id')
+  async updateClub(@Param('id') id: string, @Body() club: ClubUpdateRequest): Promise<ClubEntity> {
+    // todo: this can eventually be updated to bulk invite members
+    return await this.clubService.updateClub(id, club);
+  }
+
+  @Delete(`:id`)
+  async deleteClub(@Param('id') id: string): Promise<void> {
+    return await this.clubService.deleteClub(id);
   }
 
   @Get(':id/memberships')
@@ -49,5 +60,9 @@ export class ClubController {
 
 export interface ClubCreationRequest {
   adminId: string;
+  name: string;
+}
+
+export interface ClubUpdateRequest {
   name: string;
 }

@@ -2,7 +2,7 @@ import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { MembershipEntity } from '../membership/membership.entity';
-import { ClubCreationRequest } from './club.controller';
+import { ClubCreationRequest, ClubUpdateRequest } from './club.controller';
 import { ClubEntity } from './club.entity';
 
 @Injectable()
@@ -15,11 +15,15 @@ export class ClubService {
   ) {}
 
   getClubs(): Promise<ClubEntity[]> {
-    return this.clubRepository.find();
+    return this.clubRepository.find({ isSoftDeleted: false });
   }
 
-  async findOne(id: string): Promise<ClubEntity | undefined> {
-    return await this.clubRepository.findOne({ id: id });
+  async findClub(id: string): Promise<ClubEntity | undefined> {
+    const clubEntity = await this.clubRepository.findOne({ id: id });
+    if (!clubEntity || clubEntity?.isSoftDeleted === true) {
+      throw new HttpException('Club not found', HttpStatus.NOT_FOUND);
+    }
+    return clubEntity;
   }
 
   async createClub(club: ClubCreationRequest): Promise<ClubEntity> {
@@ -33,5 +37,24 @@ export class ClubService {
     });
 
     return newClub;
+  }
+
+  async updateClub(
+    id: string,
+    clubRequest: ClubUpdateRequest,
+  ): Promise<ClubEntity> {
+    const clubEntity = await this.findClub(id);
+    return await this.clubRepository.save({
+      ...clubEntity,
+      ...clubRequest,
+    });
+  }
+
+  async deleteClub(id: string): Promise<void> {
+    const clubEntity = await this.findClub(id);
+    await this.clubRepository.save({
+      ...clubEntity,
+      isSoftDeleted: true,
+    });
   }
 }

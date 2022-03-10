@@ -10,4 +10,12 @@ export class ClubEntity {
   @ApiProperty()
   @Column({ type: 'varchar', length: 300 })
   name: string;
+
+  @ApiProperty()
+  @Column({
+    type: 'boolean',
+    default: false,
+    nullable: false,
+  })
+  isSoftDeleted: boolean;
 }
