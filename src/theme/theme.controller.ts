@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, Post, Query } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, Put } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { NominateBookRequest, Book } from '../book/book.entity';
 import { BookService } from '../book/book.service';
@@ -21,6 +21,11 @@ export class ThemeController {
   @Post()
   async createTheme(@Body() theme: ThemeRequest): Promise<ThemeEntity> {
     return await this.themeService.createTheme(theme);
+  }
+
+  @Put(':id')
+  async updateTheme(@Param('id') id: string, @Body() theme: ThemeRequest): Promise<ThemeEntity> {
+    return await this.themeService.updateTheme(id, theme);
   }
 
   @Delete(':id')

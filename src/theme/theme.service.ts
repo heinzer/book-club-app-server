@@ -1,7 +1,12 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { getTheme, ThemeEntity, ThemeRequest, ThemeStatus } from './theme.entity';
+import {
+  getTheme,
+  ThemeEntity,
+  ThemeRequest,
+  ThemeStatus,
+} from './theme.entity';
 
 @Injectable()
 export class ThemeService {
@@ -39,9 +44,13 @@ export class ThemeService {
       status: ThemeStatus.OPEN,
       isSoftDeleted: false,
     });
-    const openFutureThemes: ThemeEntity[] = openThemes.filter(theme => theme.discussionDeadline >= new Date());
+    const openFutureThemes: ThemeEntity[] = openThemes.filter(
+      (theme) => theme.discussionDeadline >= new Date(),
+    );
     if (openFutureThemes.length > 1) {
-      return openFutureThemes.reduce(function (a, b) { return a.discussionDeadline < b.discussionDeadline ? a : b; });
+      return openFutureThemes.reduce(function (a, b) {
+        return a.discussionDeadline < b.discussionDeadline ? a : b;
+      });
     } else {
       return openFutureThemes[0];
     }
@@ -51,5 +60,16 @@ export class ThemeService {
     const theme = new ThemeEntity();
     Object.assign(theme, themeRequest);
     return await this.themeRepository.save(theme);
+  }
+
+  async updateTheme(
+    id: string,
+    themeRequest: ThemeRequest,
+  ): Promise<ThemeEntity> {
+    const themeEntity = await this.getTheme(id);
+    return await this.themeRepository.save({
+      ...themeEntity,
+      ...themeRequest,
+    });
   }
 }

@@ -5,7 +5,7 @@ import { lastValueFrom, map, Observable } from 'rxjs';
 import { Repository } from 'typeorm';
 import { NominationEntity } from '../nomination/nomination.entity';
 import { getTheme, ThemeEntity } from '../theme/theme.entity';
-import { NominateBookRequest, Book, BookEntity, ExternalBookEntity } from './book.entity';
+import { NominateBookRequest, Book, BookEntity } from './book.entity';
 
 @Injectable()
 export class BookService {
