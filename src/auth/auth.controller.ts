@@ -1,11 +1,4 @@
-import {
-  Controller,
-  Get,
-  Request,
-  Post,
-  UseGuards,
-  Body,
-} from '@nestjs/common';
+import { Controller, Request, Post, UseGuards, Body } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { LocalAuthGuard } from './local-auth.guard';
 import { Public } from './jwt-auth.guard';

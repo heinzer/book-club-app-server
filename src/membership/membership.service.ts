@@ -2,7 +2,7 @@ import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { ClubEntity } from '../club/club.entity';
-import { toUserResult, User, UserEntity } from '../user/user.entity';
+import { toUserResult, UserEntity, UserMembership} from '../user/user.entity';
 import { MembershipEntity } from './membership.entity';
 
 @Injectable()
@@ -30,21 +30,27 @@ export class MembershipService {
     return clubs;
   }
 
-  async findMembershipsByClub(clubId: string): Promise<User[]> {
+  async findMembershipsByClub(clubId: string): Promise<UserMembership[]> {
     const memberships: MembershipEntity[] =
       await this.membershipRepository.find({ clubId: clubId });
 
-    const users: User[] = [];
+    const users: UserMembership[] = [];
     for (const membership of memberships) {
       const user = await this.userRepository.findOne({ id: membership.userId });
       if (user) {
-        users.push(toUserResult(user));
+        users.push({
+          ...toUserResult(user),
+          isAdmin: membership.isAdmin,
+        });
       }
     }
     return users;
   }
 
-  async createMembership(userId: string, clubId: string): Promise<MembershipEntity> {
+  async createMembership(
+    userId: string,
+    clubId: string,
+  ): Promise<MembershipEntity> {
     const membershipInDb = await this.membershipRepository.findOne({
       where: { userId: userId },
     });

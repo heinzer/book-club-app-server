@@ -1,4 +1,12 @@
-import { Body, Controller, Delete, Get, Param, Post, Put } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Post,
+  Put,
+} from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { NominateBookRequest, Book } from '../book/book.entity';
 import { BookService } from '../book/book.service';
@@ -24,7 +32,10 @@ export class ThemeController {
   }
 
   @Put(':id')
-  async updateTheme(@Param('id') id: string, @Body() theme: ThemeRequest): Promise<ThemeEntity> {
+  async updateTheme(
+    @Param('id') id: string,
+    @Body() theme: ThemeRequest,
+  ): Promise<ThemeEntity> {
     return await this.themeService.updateTheme(id, theme);
   }
 
@@ -39,7 +50,10 @@ export class ThemeController {
   }
 
   @Post(':id/books')
-  async nominateBook(@Param('id') id: string, @Body() book: NominateBookRequest): Promise<Book> {
+  async nominateBook(
+    @Param('id') id: string,
+    @Body() book: NominateBookRequest,
+  ): Promise<Book> {
     return await this.bookService.nominateBook(book);
   }
 }

@@ -1,7 +1,7 @@
 import { HttpService } from '@nestjs/axios';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { lastValueFrom, map, Observable } from 'rxjs';
+import { lastValueFrom, map } from 'rxjs';
 import { Repository } from 'typeorm';
 import { NominationEntity } from '../nomination/nomination.entity';
 import { getTheme, ThemeEntity } from '../theme/theme.entity';

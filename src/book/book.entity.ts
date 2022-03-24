@@ -52,7 +52,7 @@ export interface ExternalBookEntity {
   subject_people: string[];
   key: string;
   authors: ExternalAuthor[];
-  type: { key: string; }
+  type: { key: string };
 }
 
 export interface ExternalAuthor {

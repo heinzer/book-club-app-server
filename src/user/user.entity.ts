@@ -79,6 +79,10 @@ export const Omit = <T, K extends keyof T>(
 
 export class User extends Omit(UserEntity, ['password']) {}
 
+export class UserMembership extends User {
+  isAdmin: boolean;
+}
+
 export class UserCreateRequest extends Omit(UserEntity, ['id']) {}
 
 export class AuthedUser extends User {

@@ -1,9 +1,17 @@
-import { Body, Controller, Delete, Get, Param, Post, Put, Query } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Post,
+  Put,
+} from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { MembershipService } from '../membership/membership.service';
 import { ThemeEntity } from '../theme/theme.entity';
 import { ThemeService } from '../theme/theme.service';
-import { User } from '../user/user.entity';
+import {User, UserMembership} from '../user/user.entity';
 import { ClubEntity } from './club.entity';
 import { ClubService } from './club.service';
 
@@ -32,7 +40,10 @@ export class ClubController {
   }
 
   @Put(':id')
-  async updateClub(@Param('id') id: string, @Body() club: ClubUpdateRequest): Promise<ClubEntity> {
+  async updateClub(
+    @Param('id') id: string,
+    @Body() club: ClubUpdateRequest,
+  ): Promise<ClubEntity> {
     // todo: this can eventually be updated to bulk invite members
     return await this.clubService.updateClub(id, club);
   }
@@ -43,7 +54,7 @@ export class ClubController {
   }
 
   @Get(':id/memberships')
-  async getClubMemberships(@Param('id') id: string): Promise<User[]> {
+  async getClubMemberships(@Param('id') id: string): Promise<UserMembership[]> {
     return await this.membershipService.findMembershipsByClub(id);
   }
 
