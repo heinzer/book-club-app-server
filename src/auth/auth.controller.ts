@@ -35,6 +35,7 @@ export class AuthController {
     const user = await this.userService.createUser(createUserRequest);
     Object.assign(authedUser, user);
     authedUser.access_token = await this.authService.login(user);
+    authedUser.clubMemberships = [];
     return authedUser;
   }
 }
