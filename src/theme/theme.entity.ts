@@ -7,14 +7,14 @@ import { Omit } from '../user/user.entity';
 export class ThemeEntity {
   @ApiProperty()
   @PrimaryGeneratedColumn()
-  id: string;
+  id: number;
 
   @ApiProperty()
   @Column({
     type: 'varchar',
     nullable: false,
   })
-  clubId: string;
+  clubId: number;
 
   @ApiProperty()
   @Column({
@@ -92,7 +92,7 @@ export async function getTheme(
   themeRepository: Repository<ThemeEntity>,
   id: string,
 ): Promise<ThemeEntity> {
-  const theme = await themeRepository.findOne({ id: id });
+  const theme = await themeRepository.findOne({ id: +id });
   if (!theme || theme?.isSoftDeleted === true) {
     throw new HttpException('Theme not found', HttpStatus.NOT_FOUND);
   }

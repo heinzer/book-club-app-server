@@ -18,12 +18,12 @@ export class UserController {
   }
 
   @Get('users/:id')
-  async getUser(@Param('id') id: string): Promise<User> {
+  async getUser(@Param('id') id: number): Promise<User> {
     return await this.userService.findOne(id);
   }
 
   @Get('users/:id/memberships')
-  async getUserMemberships(@Param('id') id: string): Promise<ClubMembership[]> {
+  async getUserMemberships(@Param('id') id: number): Promise<ClubMembership[]> {
     return await this.membershipService.findMembershipsByUser(id);
   }
 

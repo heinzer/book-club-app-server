@@ -15,7 +15,7 @@ export class ThemeService {
     private themeRepository: Repository<ThemeEntity>,
   ) {}
 
-  async getThemes(clubId: string): Promise<ThemeEntity[]> {
+  async getThemes(clubId: number): Promise<ThemeEntity[]> {
     return await this.themeRepository.find({
       clubId: clubId,
       isSoftDeleted: false,
@@ -38,7 +38,7 @@ export class ThemeService {
    * Finds the earliest open future theme.
    * @param clubId
    */
-  async getCurrentTheme(clubId: string): Promise<ThemeEntity> {
+  async getCurrentTheme(clubId: number): Promise<ThemeEntity> {
     const openThemes: ThemeEntity[] = await this.themeRepository.find({
       clubId: clubId,
       status: ThemeStatus.OPEN,

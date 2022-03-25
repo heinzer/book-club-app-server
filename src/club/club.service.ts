@@ -18,7 +18,7 @@ export class ClubService {
     return this.clubRepository.find({ isSoftDeleted: false });
   }
 
-  async findClub(id: string): Promise<ClubEntity | undefined> {
+  async findClub(id: number): Promise<ClubEntity | undefined> {
     const clubEntity = await this.clubRepository.findOne({ id: id });
     if (!clubEntity || clubEntity?.isSoftDeleted === true) {
       throw new HttpException('Club not found', HttpStatus.NOT_FOUND);
@@ -41,7 +41,7 @@ export class ClubService {
   }
 
   async updateClub(
-    id: string,
+    id: number,
     clubRequest: ClubUpdateRequest,
   ): Promise<ClubEntity> {
     const clubEntity = await this.findClub(id);
@@ -51,7 +51,7 @@ export class ClubService {
     });
   }
 
-  async deleteClub(id: string): Promise<void> {
+  async deleteClub(id: number): Promise<void> {
     const clubEntity = await this.findClub(id);
     await this.clubRepository.save({
       ...clubEntity,

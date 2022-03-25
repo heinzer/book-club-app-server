@@ -2,7 +2,7 @@ import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { ClubEntity } from '../club/club.entity';
-import { toUserResult, UserEntity, UserMembership} from '../user/user.entity';
+import { toUserResult, UserEntity, UserMembership } from '../user/user.entity';
 import { MembershipEntity } from './membership.entity';
 
 @Injectable()
@@ -16,13 +16,13 @@ export class MembershipService {
     private clubRepository: Repository<ClubEntity>,
   ) {}
 
-  async findMembershipsByUser(userId: string): Promise<ClubMembership[]> {
+  async findMembershipsByUser(userId: number): Promise<ClubMembership[]> {
     const memberships: MembershipEntity[] =
       await this.membershipRepository.find({ userId: userId });
 
     const clubs: ClubMembership[] = [];
     for (const membership of memberships) {
-      const club = await this.clubRepository.findOne({ id: membership.clubId });
+      const club = await this.clubRepository.findOne({ id: +membership.clubId });
       if (club) {
         clubs.push({
           ...club,
@@ -33,7 +33,7 @@ export class MembershipService {
     return clubs;
   }
 
-  async findMembershipsByClub(clubId: string): Promise<UserMembership[]> {
+  async findMembershipsByClub(clubId: number): Promise<UserMembership[]> {
     const memberships: MembershipEntity[] =
       await this.membershipRepository.find({ clubId: clubId });
 
@@ -51,8 +51,8 @@ export class MembershipService {
   }
 
   async createMembership(
-    userId: string,
-    clubId: string,
+    userId: number,
+    clubId: number,
   ): Promise<MembershipEntity> {
     const membershipInDb = await this.membershipRepository.findOne({
       where: { userId: userId },

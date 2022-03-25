@@ -30,7 +30,7 @@ export class ClubController {
   }
 
   @Get(':id')
-  getClub(@Param('id') id: string): Promise<ClubEntity | undefined> {
+  getClub(@Param('id') id: number): Promise<ClubEntity | undefined> {
     return this.clubService.findClub(id);
   }
 
@@ -41,7 +41,7 @@ export class ClubController {
 
   @Put(':id')
   async updateClub(
-    @Param('id') id: string,
+    @Param('id') id: number,
     @Body() club: ClubUpdateRequest,
   ): Promise<ClubEntity> {
     // todo: this can eventually be updated to bulk invite members
@@ -49,28 +49,28 @@ export class ClubController {
   }
 
   @Delete(`:id`)
-  async deleteClub(@Param('id') id: string): Promise<void> {
+  async deleteClub(@Param('id') id: number): Promise<void> {
     return await this.clubService.deleteClub(id);
   }
 
   @Get(':id/memberships')
-  async getClubMemberships(@Param('id') id: string): Promise<UserMembership[]> {
+  async getClubMemberships(@Param('id') id: number): Promise<UserMembership[]> {
     return await this.membershipService.findMembershipsByClub(id);
   }
 
   @Get(':id/current-theme')
-  async getCurrentTheme(@Param('id') id: string): Promise<ThemeEntity> {
+  async getCurrentTheme(@Param('id') id: number): Promise<ThemeEntity> {
     return await this.themeService.getCurrentTheme(id);
   }
 
   @Get(':id/themes')
-  async getThemes(@Param('id') id: string): Promise<ThemeEntity[]> {
+  async getThemes(@Param('id') id: number): Promise<ThemeEntity[]> {
     return await this.themeService.getThemes(id);
   }
 }
 
 export interface ClubCreationRequest {
-  adminId: string;
+  adminId: number;
   name: string;
 }
 

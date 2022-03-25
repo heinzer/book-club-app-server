@@ -38,7 +38,7 @@ export class UserService {
     return toUserResult(newUser); // remove the password before returning to the user
   }
 
-  async findOne(id: string): Promise<User | undefined> {
+  async findOne(id: number): Promise<User | undefined> {
     const user = await this.usersRepository.findOne({ id: id });
     return user ? toUserResult(user) : undefined;
   }

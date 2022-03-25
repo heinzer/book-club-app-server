@@ -4,19 +4,19 @@ import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
 @Entity({ name: 'membership' })
 export class MembershipEntity {
   @PrimaryGeneratedColumn()
-  id: string;
+  id: number;
 
   @Column({
     type: 'varchar',
     nullable: false,
   })
-  userId: string;
+  userId: number;
 
   @Column({
     type: 'varchar',
     nullable: false,
   })
-  clubId: string;
+  clubId: number;
 
   @ApiProperty()
   @Column({

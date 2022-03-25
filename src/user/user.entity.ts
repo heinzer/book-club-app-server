@@ -12,7 +12,7 @@ import * as bcrypt from 'bcrypt';
 export class UserEntity {
   @ApiProperty()
   @PrimaryGeneratedColumn()
-  id: string;
+  id: number;
 
   @ApiProperty()
   @Column({

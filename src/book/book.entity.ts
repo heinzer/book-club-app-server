@@ -6,7 +6,7 @@ import { NominationEntity } from '../nomination/nomination.entity';
 export class BookEntity {
   @ApiProperty()
   @PrimaryGeneratedColumn()
-  id: string;
+  id: number;
 
   @ApiProperty()
   @Column({

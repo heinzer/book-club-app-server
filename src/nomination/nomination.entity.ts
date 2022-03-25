@@ -5,7 +5,7 @@ import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
 export class NominationEntity {
   @ApiProperty()
   @PrimaryGeneratedColumn()
-  id: string;
+  id: number;
 
   @ApiProperty()
   @Column({
@@ -19,7 +19,7 @@ export class NominationEntity {
     type: 'numeric',
     nullable: false,
   })
-  bookId: string;
+  bookId: number;
 
   @ApiProperty()
   @Column({
