@@ -7,7 +7,6 @@ import {
   CreateDateColumn,
 } from 'typeorm';
 import * as bcrypt from 'bcrypt';
-import {ClubMembership} from '../membership/membership.service';
 
 @Entity({ name: 'user' })
 export class UserEntity {
@@ -86,7 +85,6 @@ export class UserMembership extends User {
 
 export class UserCreateRequest extends Omit(UserEntity, ['id']) {}
 
-export class AuthedUser extends User {
+export class AccessToken {
   access_token: string;
-  clubMemberships: ClubMembership[];
 }
