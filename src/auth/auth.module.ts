@@ -8,6 +8,7 @@ import { LocalAuthGuard } from './local-auth.guard';
 import { JwtStrategy } from './jwt.strategy';
 import { JwtModule } from '@nestjs/jwt';
 import * as dotenv from 'dotenv';
+import { MembershipModule } from '../membership/membership.module';
 dotenv.config();
 
 @Module({
@@ -16,6 +17,7 @@ dotenv.config();
       secret: process.env.SECRET_KEY,
       signOptions: { expiresIn: '2h' },
     }),
+    MembershipModule,
     PassportModule,
     UserModule,
   ],
