@@ -16,15 +16,18 @@ export class MembershipService {
     private clubRepository: Repository<ClubEntity>,
   ) {}
 
-  async findMembershipsByUser(userId: string): Promise<ClubEntity[]> {
+  async findMembershipsByUser(userId: string): Promise<ClubMembership[]> {
     const memberships: MembershipEntity[] =
       await this.membershipRepository.find({ userId: userId });
 
-    const clubs: ClubEntity[] = [];
+    const clubs: ClubMembership[] = [];
     for (const membership of memberships) {
       const club = await this.clubRepository.findOne({ id: membership.clubId });
       if (club) {
-        clubs.push(club);
+        clubs.push({
+          ...club,
+          isAdmin: membership.isAdmin,
+        });
       }
     }
     return clubs;
@@ -68,4 +71,8 @@ export class MembershipService {
       });
     return await this.membershipRepository.save(newMembership);
   }
+}
+
+export interface ClubMembership extends ClubEntity {
+  isAdmin: boolean;
 }

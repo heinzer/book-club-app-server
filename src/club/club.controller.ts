@@ -11,7 +11,7 @@ import { ApiTags } from '@nestjs/swagger';
 import { MembershipService } from '../membership/membership.service';
 import { ThemeEntity } from '../theme/theme.entity';
 import { ThemeService } from '../theme/theme.service';
-import {User, UserMembership} from '../user/user.entity';
+import { UserMembership } from '../user/user.entity';
 import { ClubEntity } from './club.entity';
 import { ClubService } from './club.service';
 

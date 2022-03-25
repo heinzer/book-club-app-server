@@ -1,7 +1,7 @@
 import { Controller, Get, Param, Request } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { ClubEntity } from '../club/club.entity';
-import { MembershipService } from '../membership/membership.service';
+import {ClubMembership, MembershipService} from '../membership/membership.service';
 import { User } from './user.entity';
 import { UserService } from './user.service';
 
@@ -24,7 +24,7 @@ export class UserController {
   }
 
   @Get('users/:id/memberships')
-  async getUserMemberships(@Param('id') id: string): Promise<ClubEntity[]> {
+  async getUserMemberships(@Param('id') id: string): Promise<ClubMembership[]> {
     return await this.membershipService.findMembershipsByUser(id);
   }
 
