@@ -4,9 +4,11 @@ import {
   Column,
   PrimaryGeneratedColumn,
   BeforeInsert,
-  CreateDateColumn,
+  CreateDateColumn, Repository,
 } from 'typeorm';
 import * as bcrypt from 'bcrypt';
+import {HttpException, HttpStatus} from '@nestjs/common';
+import {ClubEntity} from '../club/club.entity';
 
 @Entity({ name: 'user' })
 export class UserEntity {
@@ -65,6 +67,14 @@ export class UserEntity {
   async hashPassword() {
     this.password = await bcrypt.hash(this.password, 10);
   }
+}
+
+export async function findUser(userRepository: Repository<UserEntity>, id: number): Promise<User | undefined> {
+  const userEntity = await userRepository.findOne({ id: id });
+  if (!userEntity) {
+    throw new HttpException('Club not found', HttpStatus.NOT_FOUND);
+  }
+  return userEntity ? toUserResult(userEntity) : undefined;
 }
 
 export function toUserResult(userEntity: UserEntity): User {

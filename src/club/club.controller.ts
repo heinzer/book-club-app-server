@@ -75,5 +75,6 @@ export interface ClubCreationRequest {
 }
 
 export interface ClubUpdateRequest {
+  id: number;
   name: string;
 }

@@ -3,7 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { MembershipEntity } from '../membership/membership.entity';
 import { ClubCreationRequest, ClubUpdateRequest } from './club.controller';
-import { ClubEntity } from './club.entity';
+import { ClubEntity, findClub } from './club.entity';
 
 @Injectable()
 export class ClubService {
@@ -19,11 +19,7 @@ export class ClubService {
   }
 
   async findClub(id: number): Promise<ClubEntity | undefined> {
-    const clubEntity = await this.clubRepository.findOne({ id: id });
-    if (!clubEntity || clubEntity?.isSoftDeleted === true) {
-      throw new HttpException('Club not found', HttpStatus.NOT_FOUND);
-    }
-    return clubEntity;
+    return await findClub(this.clubRepository, id);
   }
 
   async createClub(club: ClubCreationRequest): Promise<ClubEntity> {
@@ -44,7 +40,7 @@ export class ClubService {
     id: number,
     clubRequest: ClubUpdateRequest,
   ): Promise<ClubEntity> {
-    const clubEntity = await this.findClub(id);
+    const clubEntity: ClubEntity = await this.findClub(id);
     return await this.clubRepository.save({
       ...clubEntity,
       ...clubRequest,

@@ -1,8 +1,8 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { ClubEntity } from '../club/club.entity';
-import { toUserResult, UserEntity, UserMembership } from '../user/user.entity';
+import {ClubEntity, findClub} from '../club/club.entity';
+import {findUser, toUserResult, UserEntity, UserMembership} from '../user/user.entity';
 import { MembershipEntity } from './membership.entity';
 
 @Injectable()
@@ -17,12 +17,15 @@ export class MembershipService {
   ) {}
 
   async findMembershipsByUser(userId: number): Promise<ClubMembership[]> {
+    // verify that this user id exists
+    await findUser(this.userRepository, userId);
+
     const memberships: MembershipEntity[] =
       await this.membershipRepository.find({ userId: userId });
 
     const clubs: ClubMembership[] = [];
     for (const membership of memberships) {
-      const club = await this.clubRepository.findOne({ id: +membership.clubId });
+      const club = await this.clubRepository.findOne({ id: +membership.clubId, isSoftDeleted: false });
       if (club) {
         clubs.push({
           ...club,
@@ -34,6 +37,9 @@ export class MembershipService {
   }
 
   async findMembershipsByClub(clubId: number): Promise<UserMembership[]> {
+    // verify that this club id exists and is not soft deleted
+    await findClub(this.clubRepository, clubId);
+
     const memberships: MembershipEntity[] =
       await this.membershipRepository.find({ clubId: clubId });
 

@@ -6,7 +6,7 @@ import {
   UserCreateRequest,
   toUserResult,
   User,
-  UserEntity,
+  UserEntity, findUser,
 } from './user.entity';
 
 @Injectable()
@@ -38,9 +38,8 @@ export class UserService {
     return toUserResult(newUser); // remove the password before returning to the user
   }
 
-  async findOne(id: number): Promise<User | undefined> {
-    const user = await this.usersRepository.findOne({ id: id });
-    return user ? toUserResult(user) : undefined;
+  async findUser(id: number): Promise<User | undefined> {
+    return await findUser(this.usersRepository, id);
   }
 
   async findByEmail(email: string): Promise<User | undefined> {
