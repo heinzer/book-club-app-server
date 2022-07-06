@@ -1,4 +1,4 @@
-import { Controller, Request, Post, UseGuards, Body } from '@nestjs/common';
+import { Controller, Request, Post, UseGuards, Body, Get} from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { LocalAuthGuard } from './local-auth.guard';
 import { Public } from './jwt-auth.guard';
@@ -21,12 +21,15 @@ export class AuthController {
     return { access_token: this.authService.login(req.user)};
   }
 
-
-
   @Public()
   @Post('register')
   async registerUser(@Body() createUserRequest: UserCreateRequest): Promise<AccessToken> {
     const user = await this.userService.createUser(createUserRequest);
     return { access_token: await this.authService.login(user)};
+  }
+
+  @Get('isAuthed')
+  isAuthenticated() {
+    return true;
   }
 }
