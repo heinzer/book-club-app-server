@@ -45,18 +45,17 @@ export class ThemeController {
     return await this.themeService.deleteTheme(id);
   }
 
-  @Get(':id/books')
-  async getBooks(@Param('id') id: string): Promise<Book[]> {
-    return await this.bookService.getBooks(id);
-  }
-
   // GET/UPDATE/DELETE nominations by user ex: /books/nominate?user=123
   @Get(':id/books/nominate')
   async getNominatedBooks(
     @Param('id') id: string,
-    @Query('userId') userId: string,
+    @Query('userId') userId?: string,
   ): Promise<Book[]> {
-    return await this.bookService.getNominatedBooks(userId, id);
+    if (userId) {
+      return await this.bookService.getNominatedBooks(userId, id);
+    } else {
+      return await this.bookService.getAllNominatedBooks(id);
+    }
   }
 
   @Post(':id/books/nominate')

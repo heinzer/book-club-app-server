@@ -20,7 +20,7 @@ export class BookService {
   ) {}
 
   // gets all the nominated books for a single theme
-  async getBooks(themeId: string): Promise<Book[]> {
+  async getAllNominatedBooks(themeId: string): Promise<Book[]> {
     await getTheme(this.themeRepository, themeId); // validate that the theme is not soft deleted
 
     const nominations: NominationEntity[] =
