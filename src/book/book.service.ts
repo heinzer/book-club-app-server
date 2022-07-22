@@ -19,6 +19,7 @@ export class BookService {
     private httpService: HttpService,
   ) {}
 
+  // gets all the nominated books for a single theme
   async getBooks(themeId: string): Promise<Book[]> {
     await getTheme(this.themeRepository, themeId); // validate that the theme is not soft deleted
 
@@ -50,9 +51,33 @@ export class BookService {
     );
   }
 
+  async getNominatedBooks(userId: string, themeId: string): Promise<Book[]> {
+    await getTheme(this.themeRepository, themeId); // validate that the theme is not soft deleted
+
+    const nominations: NominationEntity[] =
+        await this.nominationRepository.find({ themeId: themeId, nominatorId: userId });
+    console.log(`Nominations: ${JSON.stringify(nominations)}`);
+
+    const books: any[] = [];
+    for (const nomination of nominations) {
+      const book = await this.bookRepository.findOne({ id: nomination.bookId });
+      if (book) {
+        const externalBookData = await this.getExternalBook(book.workId);
+        books.push({ externalBookData, nomination, book });
+      }
+    }
+
+    return books;
+  }
+
+  async deleteNominatedBook(userId: string, themeId: string, nominationId: string): Promise<any> {
+    return await this.nominationRepository.delete({ nominatorId: userId, themeId: themeId, id: +nominationId});
+  }
+
   async nominateBook(addBookRequest: NominateBookRequest): Promise<Book> {
     await getTheme(this.themeRepository, addBookRequest.themeId); // validate that the theme is not soft deleted
     // todo: throw an error if the nomination phase is closed?
+    // todo: limit nominations to only 3 books per theme
 
     const result: Book = {
       book: undefined,

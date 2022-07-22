@@ -6,6 +6,7 @@ import {
   Param,
   Post,
   Put,
+  Query,
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { NominateBookRequest, Book } from '../book/book.entity';
@@ -49,11 +50,34 @@ export class ThemeController {
     return await this.bookService.getBooks(id);
   }
 
-  @Post(':id/books')
+  // GET/UPDATE/DELETE nominations by user ex: /books/nominate?user=123
+  @Get(':id/books/nominate')
+  async getNominatedBooks(
+    @Param('id') id: string,
+    @Query('userId') userId: string,
+    @Query('themeId') themeId: string,
+  ): Promise<Book[]> {
+    return await this.bookService.getNominatedBooks(userId, themeId);
+  }
+
+  @Post(':id/books/nominate')
   async nominateBook(
     @Param('id') id: string,
+    @Query('userId') userId: string,
     @Body() book: NominateBookRequest,
   ): Promise<Book> {
     return await this.bookService.nominateBook(book);
   }
+
+  @Delete(':id/books/nominate')
+  async deleteNomination(
+    @Param('id') id: string,
+    @Query('userId') userId: string,
+    @Query('themeId') themeId: string,
+    @Query('nominationId') nominationId: string,
+  ): Promise<void> {
+    return await this.bookService.deleteNominatedBook(userId, themeId, nominationId);
+  }
+
+  // GET/UPDATE/DELETE votes by user /books/nominate?user=123
 }
