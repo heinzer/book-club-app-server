@@ -13,13 +13,6 @@ export class BookEntity {
     type: 'varchar',
     nullable: false,
   })
-  isbn: string;
-
-  @ApiProperty()
-  @Column({
-    type: 'varchar',
-    nullable: false,
-  })
   workId: string;
 
   @ApiProperty()
@@ -39,7 +32,6 @@ export interface Book {
 export interface NominateBookRequest {
   themeId: string;
   nominatorId: string;
-  isbn: string;
   workId: string;
   triggerWarnings: string;
 }

@@ -67,7 +67,6 @@ export class BookService {
 
     if (!existingBook) {
       const newBook = await this.bookRepository.create({
-        isbn: addBookRequest.isbn,
         workId: addBookRequest.workId,
         triggerWarnings: addBookRequest.triggerWarnings,
       });
