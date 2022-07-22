@@ -55,9 +55,8 @@ export class ThemeController {
   async getNominatedBooks(
     @Param('id') id: string,
     @Query('userId') userId: string,
-    @Query('themeId') themeId: string,
   ): Promise<Book[]> {
-    return await this.bookService.getNominatedBooks(userId, themeId);
+    return await this.bookService.getNominatedBooks(userId, id);
   }
 
   @Post(':id/books/nominate')
@@ -73,10 +72,9 @@ export class ThemeController {
   async deleteNomination(
     @Param('id') id: string,
     @Query('userId') userId: string,
-    @Query('themeId') themeId: string,
     @Query('nominationId') nominationId: string,
   ): Promise<void> {
-    return await this.bookService.deleteNominatedBook(userId, themeId, nominationId);
+    return await this.bookService.deleteNominatedBook(userId, id, nominationId);
   }
 
   // GET/UPDATE/DELETE votes by user /books/nominate?user=123
